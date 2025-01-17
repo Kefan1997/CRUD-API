@@ -1,0 +1,21 @@
+{
+  "name": "CRUD-API",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Kefan1997/CRUD-API.git",
+  "author": "Oleg Rashchinksy <oleg.rashchinksy@sharpgaming.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev src/index.ts"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/uuid": "^10.0.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.3"
+  }
+}
