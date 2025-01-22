@@ -4,3 +4,7 @@ export interface User {
   email: string;
   age: number;
 }
+
+export type Users = {
+  [id: string]: User;
+}
