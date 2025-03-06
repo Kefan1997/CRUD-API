@@ -1,117 +1,103 @@
 import { Request, Response } from 'express';
-import { v4 as uuidv4, validate } from 'uuid';
-import { User } from '../types/response';
-import { getUsersFromFile, writeUsersToFile } from '../helpers';
+import { validate } from 'uuid';
+import { User } from '../modules/user';
+import UserService from '../services/userService';
 
-export const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await getUsersFromFile();
-    res.status(200).json(users);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Internal server error' });
+export default class UserController {
+  static fetchUsers(req: Request, res: Response) {
+    try {
+      const users = UserService.getUsers();
+      res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
-};
 
-export const getUserById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { userId } = req.params;
-    if (!validate(userId)) {
-      res.status(400).json({ message: 'Invalid user ID format' });
-      return;
+  static fetchUserById(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      if (!validate(userId)) {
+        res.status(400).json({ message: 'Invalid user ID format' });
+        return;
+      }
+
+      const user = UserService.getUserById(userId);
+
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      res.status(200).json(user);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
     }
-
-    const users = await getUsersFromFile();
-    const user = users[userId];
-
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    res.status(200).json(user);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Internal server error' });
   }
-};
 
-export const createUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { name, email, age } = req.body;
-    if (!name || !email || typeof age !== 'number') {
-      res.status(400).json({ message: 'Missing required fields' });
-      return;
+  static createUser(req: Request, res: Response) {
+    try {
+      const { name, email, age } = req.body;
+
+      if (!name || !email || typeof age !== 'number') {
+        res.status(400).json({ message: 'Missing required fields' });
+        return;
+      }
+
+      const newUser: User = UserService.createUser(name, email, age);
+
+      res.status(201).json(newUser);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
     }
-    const users = await getUsersFromFile();
-    const newUser: User = { id: uuidv4(), name, email, age };
-    users[newUser.id] = newUser;
-
-    await writeUsersToFile(users);
-
-    res.status(201).json(newUser);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Internal server error' });
   }
-};
 
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { userId } = req.params;
-    if (!validate(userId)) {
-      res.status(400).json({ message: 'Invalid user ID format' });
-      return;
+  static updateUser(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      if (!validate(userId)) {
+        res.status(400).json({ message: 'Invalid user ID format' });
+        return;
+      }
+
+      const updatedUser = UserService.updateUser(userId, req.body);
+
+      if (!updatedUser) {
+        res.status(400).json({ message: 'User not found' });
+        return;
+      }
+
+      res.status(200).json(updatedUser);
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
     }
-
-    const users = await getUsersFromFile();
-    const user = users[userId];
-
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    const { name, email, age } = req.body;
-
-    users[userId] = {
-      ...user,
-      name: name ?? user.name,
-      email: email || user.email,
-      age: age || user.age,
-    };
-
-    await writeUsersToFile(users);
-
-    res.status(200).json(users[userId]);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Internal server error' });
   }
-};
 
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { userId } = req.params;
-    if (!validate(userId)) {
-      res.status(400).json({ message: 'Invalid user ID format' });
-      return;
+  static deleteUser(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      if (!validate(userId)) {
+        res.status(400).json({ message: 'Invalid user ID format' });
+        return;
+      }
+
+      const deletedUser = UserService.deleteUser(userId);
+
+      if (!deletedUser) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      res.status(204).send();
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ message: 'Internal server error' });
     }
-
-    const users = await getUsersFromFile();
-    const user = users[userId];
-
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    delete users[userId];
-    await writeUsersToFile(users);
-
-    res.status(204).send();
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Internal server error' });
   }
-};
+}
