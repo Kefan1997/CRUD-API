@@ -1,9 +1,16 @@
 import db from '../db/database';
-import { User } from '../modules/user';
+import { User, Users } from '../modules/user';
 
-export default class UserRepository {
-  static getAllUsers(): User[] {
-    return db.prepare('SELECT * FROM users').all() as User[];
+export default class SQLiteUser {
+  static getAllUsers(): Users {
+    const usersArray = db.prepare('SELECT * FROM users').all() as User[];
+
+    const usersObject: Users = usersArray.reduce((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {} as Users);
+
+    return usersObject;
   }
 
   static getUserById(id: string): User | null {

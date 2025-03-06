@@ -67,7 +67,7 @@ export default class UserController {
       const updatedUser = UserService.updateUser(userId, req.body);
 
       if (!updatedUser) {
-        res.status(400).json({ message: 'User not found' });
+        res.status(404).json({ message: 'User not found' });
         return;
       }
 

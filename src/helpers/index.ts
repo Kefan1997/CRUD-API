@@ -1,5 +1,5 @@
 import fs from 'node:fs/promises';
-import { Users } from '../types/response';
+import { Users } from '../modules/user';
 
 const DATA_FILE = './users.json';
 
@@ -11,7 +11,7 @@ export const getUsersFromFile = async (): Promise<Users> => {
     console.error(e);
     return {};
   }
-}
+};
 
 export const writeUsersToFile = async (users: Users): Promise<void> => {
   try {
@@ -19,4 +19,4 @@ export const writeUsersToFile = async (users: Users): Promise<void> => {
   } catch (e) {
     console.error(e);
   }
-}
+};

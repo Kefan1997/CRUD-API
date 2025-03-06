@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { User } from '../modules/user';
-import UserRepository from '../repositories/userRepositories';
+import { User, Users } from '../modules/user';
+import UserRepository from '../repositories/userRepository';
 
 export default class UserService {
-  static getUsers(): User[] {
+  static getUsers(): Users {
     return UserRepository.getAllUsers();
   }
 
