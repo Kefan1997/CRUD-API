@@ -7,10 +7,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev src/index.ts",
-    "build": "tsc --outDir dist"
+    "build": "tsc --outDir dist && copyfiles -u 1 src/data/users.json dist"
   },
   "dependencies": {
     "better-sqlite3": "^11.8.1",
+    "copyfiles": "^2.4.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "uuid": "^11.0.5"

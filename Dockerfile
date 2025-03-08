@@ -11,6 +11,5 @@ COPY --chown=node:node package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 COPY --chown=node:node dist/ .
-COPY --chown=node:node users.json .
 
 CMD ["node", "index.js"]
