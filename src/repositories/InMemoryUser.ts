@@ -2,6 +2,7 @@ import fs from 'node:fs';
 
 import { Users, User } from '../modules/user';
 
+// discuss with Iva this step 
 const DATA_FILE = 'src/data/users.json';
 
 export default class InMemoryUser {
