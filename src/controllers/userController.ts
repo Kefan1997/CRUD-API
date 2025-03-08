@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { validate } from 'uuid';
 import { User } from '../modules/user';
 import UserService from '../services/userService';
 
@@ -17,11 +16,6 @@ export default class UserController {
   static fetchUserById(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-
-      if (!validate(userId)) {
-        res.status(400).json({ message: 'Invalid user ID format' });
-        return;
-      }
 
       const user = UserService.getUserById(userId);
 
@@ -41,11 +35,6 @@ export default class UserController {
     try {
       const { name, email, age } = req.body;
 
-      if (!name || !email || typeof age !== 'number') {
-        res.status(400).json({ message: 'Missing required fields' });
-        return;
-      }
-
       const newUser: User = UserService.createUser(name, email, age);
 
       res.status(201).json(newUser);
@@ -58,11 +47,6 @@ export default class UserController {
   static updateUser(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-
-      if (!validate(userId)) {
-        res.status(400).json({ message: 'Invalid user ID format' });
-        return;
-      }
 
       const updatedUser = UserService.updateUser(userId, req.body);
 
@@ -81,11 +65,6 @@ export default class UserController {
   static deleteUser(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-
-      if (!validate(userId)) {
-        res.status(400).json({ message: 'Invalid user ID format' });
-        return;
-      }
 
       const deletedUser = UserService.deleteUser(userId);
 
