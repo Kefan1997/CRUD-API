@@ -1,6 +1,10 @@
 import Database from 'better-sqlite3';
+import path from 'path';
 
-const db = new Database('database.sqlite', { verbose: console.log });
+const dbPath = path.join(__dirname, 'database.sqlite');
+console.log('dbPath', dbPath)
+
+const db = new Database(dbPath, { verbose: console.log });
 
 db.prepare(
   `CREATE TABLE IF NOT EXISTS users (
