@@ -1,0 +1,20 @@
+{
+  "5a84f565-af1c-4e62-9392-cd81abdc1ddf": {
+    "id": "5a84f565-af1c-4e62-9392-cd81abdc1ddf",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "age": 30
+  },
+  "77a28df5-72cd-4570-af25-dc401523be67": {
+    "id": "77a28df5-72cd-4570-af25-dc401523be67",
+    "name": "Oleg R",
+    "email": "oleg.r@example.com",
+    "age": 27
+  },
+  "64cebae0-3cff-4898-9011-dacc1d794987": {
+    "id": "64cebae0-3cff-4898-9011-dacc1d794987",
+    "name": "New name",
+    "email": "new.name@example.com",
+    "age": 25
+  }
+}
