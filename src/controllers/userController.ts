@@ -25,8 +25,9 @@ export default class UserController {
     try {
       const { userId } = req.params;
 
+      LogService.info(`Fetching user by id:${userId}...`);
       const user = UserService.getUserById(userId);
-
+      LogService.info('User fetched successfully', user);
       res.status(StatusCodes.OK).json(user);
     } catch (error) {
       if (error instanceof NotFoundError) {
@@ -47,8 +48,9 @@ export default class UserController {
     try {
       const { name, email, age } = req.body;
 
+      LogService.info('Creating user...');
       const newUser: User = UserService.createUser(name, email, age);
-
+      LogService.info('User created successfully', newUser);
       res.status(StatusCodes.CREATED).json(newUser);
     } catch (error) {
       LogService.error('Error creating user', error);
@@ -62,8 +64,9 @@ export default class UserController {
     try {
       const { userId } = req.params;
 
+      LogService.info('Updating user...');
       const updatedUser = UserService.updateUser(userId, req.body);
-
+      LogService.info('User updated successfully', updatedUser);
       if (!updatedUser) {
         res
           .status(StatusCodes.NOT_FOUND)
@@ -84,6 +87,7 @@ export default class UserController {
     try {
       const { userId } = req.params;
 
+      LogService.info(`Deleting user with userId: ${userId}...`);
       const deletedUser = UserService.deleteUser(userId);
 
       if (!deletedUser) {
@@ -93,6 +97,7 @@ export default class UserController {
         return;
       }
 
+      LogService.info(`User with userId: ${userId} deleted successfully`);
       res.status(StatusCodes.NO_CONTENT).send();
     } catch (error) {
       LogService.error('Error deleting user', error);
