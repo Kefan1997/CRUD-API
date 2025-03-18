@@ -1,27 +1,36 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { User, Users } from '../modules/user';
-import UserRepository from '../repositories/userRepository';
+import InMemoryUser from '../repositories/InMemoryUser';
+import SQLiteUser from '../repositories/sqLiteUser';
+import { DATA_STORAGE } from '../config';
+import { NotFoundError } from '../errors/error';
+
+const userRepository = DATA_STORAGE === 'memory' ? InMemoryUser : SQLiteUser;
 
 export default class UserService {
   static getUsers(): Users {
-    return UserRepository.getAllUsers();
+    return userRepository.getAllUsers();
   }
 
   static getUserById(id: string): User | null {
-    return UserRepository.getUserById(id);
+    const user = userRepository.getUserById(id);
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+    return user;
   }
 
   static createUser(name: string, email: string, age: number): User {
     const id = uuidv4();
-    return UserRepository.createUser(id, name, email, age);
+    return userRepository.createUser(id, name, email, age);
   }
 
   static updateUser(id: string, userObj: Partial<User>): User | null {
-    return UserRepository.updateUser(id, userObj);
+    return userRepository.updateUser(id, userObj);
   }
 
   static deleteUser(id: string) {
-    return UserRepository.deleteUser(id);
+    return userRepository.deleteUser(id);
   }
 }

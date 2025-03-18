@@ -4,7 +4,7 @@ import path from 'node:path';
 import { Users, User } from '../modules/user';
 
 // discuss with Ivan this step
-const DATA_FILE = path.join(__dirname, '..', 'data', 'users.json');
+const DATA_FILE = path.join(__dirname, '..', 'mocks', 'users.json');
 
 export default class InMemoryUser {
   private static users: Users = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
