@@ -1,13 +1,10 @@
 import fs from 'node:fs';
-import path from 'node:path';
 
 import { Users, User } from '../modules/user';
-
-// discuss with Ivan this step
-const DATA_FILE = path.join(__dirname, '..', 'mocks', 'users.json');
+import { MOCK_USERS_DATA_PATH } from '../config';
 
 export default class InMemoryUser {
-  private static users: Users = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  private static users: Users = JSON.parse(fs.readFileSync(MOCK_USERS_DATA_PATH, 'utf-8'));
 
   static getAllUsers(): Users {
     return this.users;
@@ -22,7 +19,7 @@ export default class InMemoryUser {
 
     this.users[id] = newUser;
 
-    fs.writeFileSync(DATA_FILE, JSON.stringify(this.users, null, 2));
+    fs.writeFileSync(MOCK_USERS_DATA_PATH, JSON.stringify(this.users, null, 2));
 
     return newUser;
   }
@@ -42,7 +39,7 @@ export default class InMemoryUser {
 
     this.users[id] = updatedUser;
 
-    fs.writeFileSync(DATA_FILE, JSON.stringify(this.users, null, 2));
+    fs.writeFileSync(MOCK_USERS_DATA_PATH, JSON.stringify(this.users, null, 2));
 
     return updatedUser;
   }
