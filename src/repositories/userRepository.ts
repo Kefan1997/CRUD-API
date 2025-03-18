@@ -2,6 +2,7 @@ import { DATA_STORAGE } from '../config';
 import InMemoryUser from './InMemoryUser';
 import SQLiteUser from './sqLiteUser';
 import { User, Users } from '../modules/user';
+import { NotFoundError } from '../errors/error';
 
 export default class UserRepository {
   static getAllUsers(): Users {
@@ -9,7 +10,11 @@ export default class UserRepository {
   }
 
   static getUserById(id: string): User | null {
-    return DATA_STORAGE === 'memory' ? InMemoryUser.getUserById(id) : SQLiteUser.getUserById(id);
+    const user = DATA_STORAGE === 'memory' ? InMemoryUser.getUserById(id) : SQLiteUser.getUserById(id);
+    if(!user) {
+      throw new NotFoundError('User not found')
+    }
+    return user
   }
 
   static createUser(id: string, name: string, email: string, age: number): User {
