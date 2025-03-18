@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+
 import { User } from '../modules/user';
 import UserService from '../services/userService';
 import { NotFoundError } from '../errors/error';
@@ -10,10 +12,12 @@ export default class UserController {
       LogService.info('Fetching users...');
       const users = UserService.getUsers();
       LogService.info('Users fetched successfully', users);
-      res.status(200).json(users);
+      res.status(StatusCodes.OK).json(users);
     } catch (error) {
       LogService.error('Error fetching users', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ errorCode: ReasonPhrases.INTERNAL_SERVER_ERROR, message: 'Internal server error' });
     }
   }
 
@@ -23,13 +27,18 @@ export default class UserController {
 
       const user = UserService.getUserById(userId);
 
-      res.status(200).json(user);
+      res.status(StatusCodes.OK).json(user);
     } catch (error) {
       if (error instanceof NotFoundError) {
-        res.status(404).json({ message: error.message });
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ errorCode: ReasonPhrases.NOT_FOUND, message: error.message });
       } else {
         LogService.error('Error fetching user', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          errorCode: ReasonPhrases.INTERNAL_SERVER_ERROR,
+          message: 'Internal server error',
+        });
       }
     }
   }
@@ -40,10 +49,12 @@ export default class UserController {
 
       const newUser: User = UserService.createUser(name, email, age);
 
-      res.status(201).json(newUser);
+      res.status(StatusCodes.CREATED).json(newUser);
     } catch (error) {
       LogService.error('Error creating user', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ errorCode: ReasonPhrases.INTERNAL_SERVER_ERROR, message: 'Internal server error' });
     }
   }
 
@@ -54,14 +65,18 @@ export default class UserController {
       const updatedUser = UserService.updateUser(userId, req.body);
 
       if (!updatedUser) {
-        res.status(404).json({ message: 'User not found' });
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ errorCode: ReasonPhrases.NOT_FOUND, message: 'User not found' });
         return;
       }
 
       res.status(200).json(updatedUser);
     } catch (error) {
       LogService.error('Error updating user', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ errorCode: ReasonPhrases.INTERNAL_SERVER_ERROR, message: 'Internal server error' });
     }
   }
 
@@ -72,14 +87,18 @@ export default class UserController {
       const deletedUser = UserService.deleteUser(userId);
 
       if (!deletedUser) {
-        res.status(404).json({ message: 'User not found' });
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ errorCode: ReasonPhrases.NOT_FOUND, message: 'User not found' });
         return;
       }
 
-      res.status(204).send();
+      res.status(StatusCodes.NO_CONTENT).send();
     } catch (error) {
       LogService.error('Error deleting user', error);
-      res.status(500).json({ message: 'Internal server error' });
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ errorCode: ReasonPhrases.INTERNAL_SERVER_ERROR, message: 'Internal server error' });
     }
   }
 }
