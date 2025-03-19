@@ -53,6 +53,8 @@ export default class InMemoryUser {
 
     delete this.users[id];
 
+    fs.writeFileSync(MOCK_USERS_DATA_PATH, JSON.stringify(this.users, null, 2));
+
     return { message: 'User deleted successfully', id };
   }
 }
