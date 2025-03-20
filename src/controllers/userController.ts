@@ -4,7 +4,7 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { User } from '../modules/user';
 import UserService from '../services/userService';
 import { NotFoundError } from '../errors/error';
-import LogService from '../services/logService';
+import LogService from '../utils/logService';
 
 export default class UserController {
   static fetchUsers(req: Request, res: Response) {
