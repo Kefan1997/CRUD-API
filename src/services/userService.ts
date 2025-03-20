@@ -15,9 +15,11 @@ export default class UserService {
 
   static getUserById(id: string): User | null {
     const user = userRepository.getUserById(id);
+
     if (!user) {
       throw new NotFoundError('User not found');
     }
+
     return user;
   }
 
@@ -27,10 +29,22 @@ export default class UserService {
   }
 
   static updateUser(id: string, userObj: Partial<User>): User | null {
-    return userRepository.updateUser(id, userObj);
+    const updatedUser = userRepository.updateUser(id, userObj);
+
+    if (!updatedUser) {
+      throw new NotFoundError('User not found');
+    }
+
+    return updatedUser;
   }
 
   static deleteUser(id: string) {
-    return userRepository.deleteUser(id);
+    const deletedUser = userRepository.deleteUser(id);
+
+    if (!deletedUser) {
+      throw new NotFoundError('User not found');
+    }
+    
+    return deletedUser;
   }
 }
